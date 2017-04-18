@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop 
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd">
+	<!-- 组件扫描 -->
+	<context:component-scan base-package="zyf"></context:component-scan>
+	<aop:config>
+		<!-- 详细讲解表达式
+		 execution(public void cn.service.impl.UserServiceImpl.save()) 
+		 访问权限 public 可以省略不写 
+		 方法的返回类型 void 如果想更通用一些 写 * 
+		 包名 cn.oracle.oaec.service.impl 包名可以用通配符 * 代替
+		 	 *.*.impl 但是不能只写一个 *，匹配不了
+		 	  如果想通用 *..* 
+		 类名 UserServiceImpl 可以使用通配符 * 
+		 	User* 
+		 	*ServiceImpl 
+		 	注意：类名后面一定要加上 点 
+		 方法名 save 可以使用通配符 * 
+		 	例子:saveUser() 
+			例子:saveCustomer() 
+				save*() 
+			如果想通用 * 
+		参数  如果有一个参数 * 
+			如果两个参数 *,* 
+			如果想通用 .. 
+			通用的标准写法 
+			execution( * *..*.*ServiceImpl.*(..)) 
+			前提是命名要规范 
+		增强/通知
+		 before 在方法之前 
+		 after 在方法之后，但是如果程序出项异常，那么增强方法也会执行 
+		 after-returnning 在方法之后 ,但是如果程序出现异常，不会执行增强方法 
+		 after-throwing 方法出现异常之后执行增强方法 
+		around 方法的前后去执行 
+		-->
+		<aop:aspect ref="trans">
+			<aop:before method="beginTransation" pointcut="execution(* *..*.*ServiceImpl.*(..))" />
+		</aop:aspect>
+
+	</aop:config>
+	<!-- 开启aop的动态代理 -->
+	<aop:aspectj-autoproxy/>
+
+</beans>
